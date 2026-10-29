@@ -1,0 +1,156 @@
+{
+ "tag": "probe_top3",
+ "mode": "hybrid_rerank",
+ "settings": {
+  "top_k": 3,
+  "rerank_k": 20,
+  "candidate_k": 20,
+  "max_context_chars": 6000,
+  "llm_provider": "llamacpp",
+  "llm_model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+  "llm_max_tokens": 512,
+  "min_rerank_score": 0.01,
+  "skip_rerank_when_confident": false,
+  "query_cache_size": 0,
+  "llm_prompt_cache": false,
+  "embedding_model": "multilingual-e5-large",
+  "reranker_model": "bge-reranker-v2-m3"
+ },
+ "support_threshold": 0.5,
+ "overall": {
+  "n": 8,
+  "answer_correctness": 0.0,
+  "n_graded_correctness": 7,
+  "faithfulness_sentence_support": 0.6,
+  "answers_with_unsupported_numbers": 0,
+  "answers_with_unverified_articles": 0,
+  "citation_precision": 0.5,
+  "answers_citing_gold": 0.6,
+  "abstention_on_unanswerable": 1.0,
+  "false_abstention_on_answerable": 0.2857,
+  "forbidden_claims": 0,
+  "latency": {
+   "p50_ms": 25460.5,
+   "p95_ms": 37826.1,
+   "mean_ms": 25374.2,
+   "n": 8
+  },
+  "mean_input_tokens": 895.2,
+  "mean_output_tokens": 41.4,
+  "mean_cost_usd": 0.0009891152942638857
+ },
+ "by_language": {
+  "ar": {
+   "n": 6,
+   "answer_correctness": 0.0,
+   "n_graded_correctness": 5,
+   "faithfulness_sentence_support": 0.75,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.375,
+   "answers_citing_gold": 0.5,
+   "abstention_on_unanswerable": 1.0,
+   "false_abstention_on_answerable": 0.2,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 20788.5,
+    "p95_ms": 33618.2,
+    "mean_ms": 22558.2,
+    "n": 6
+   },
+   "mean_input_tokens": 807.8,
+   "mean_output_tokens": 38.5,
+   "mean_cost_usd": 0.0009494091900833238
+  },
+  "en": {
+   "n": 1,
+   "answer_correctness": 0.0,
+   "n_graded_correctness": 1,
+   "faithfulness_sentence_support": null,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": null,
+   "answers_citing_gold": 0.0,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 1.0,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 27747.9,
+    "p95_ms": 27747.9,
+    "mean_ms": 27747.9,
+    "n": 1
+   },
+   "mean_input_tokens": 1116.0,
+   "mean_output_tokens": 6.0,
+   "mean_cost_usd": 0.0
+  },
+  "fr": {
+   "n": 1,
+   "answer_correctness": 0.0,
+   "n_graded_correctness": 1,
+   "faithfulness_sentence_support": 0.0,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 1.0,
+   "answers_citing_gold": 1.0,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 0.0,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 39896.5,
+    "p95_ms": 39896.5,
+    "mean_ms": 39896.5,
+    "n": 1
+   },
+   "mean_input_tokens": 1199.0,
+   "mean_output_tokens": 94.0,
+   "mean_cost_usd": 0.0022164672136111424
+  }
+ },
+ "by_category": {
+  "factual": {
+   "n": 7,
+   "answer_correctness": 0.0,
+   "n_graded_correctness": 7,
+   "faithfulness_sentence_support": 0.6,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.5,
+   "answers_citing_gold": 0.6,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 0.2857,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 27747.9,
+    "p95_ms": 38121.9,
+    "mean_ms": 27622.0,
+    "n": 7
+   },
+   "mean_input_tokens": 1023.1,
+   "mean_output_tokens": 47.3,
+   "mean_cost_usd": 0.0011304174791587265
+  },
+  "unanswerable": {
+   "n": 1,
+   "answer_correctness": null,
+   "n_graded_correctness": 0,
+   "faithfulness_sentence_support": null,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": null,
+   "answers_citing_gold": 0.0,
+   "abstention_on_unanswerable": 1.0,
+   "false_abstention_on_answerable": null,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 9639.4,
+    "p95_ms": 9639.4,
+    "mean_ms": 9639.4,
+    "n": 1
+   },
+   "mean_input_tokens": 0.0,
+   "mean_output_tokens": 0.0,
+   "mean_cost_usd": 0.0
+  }
+ }
+}

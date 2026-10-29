@@ -1,0 +1,239 @@
+# Corpus manifest. Every indexed document is listed here with its provenance.
+# A "document" can be a page range of a PDF: the official IORT volume bundles
+# the Personal Status Code with the related laws and decrees in an annex.
+#
+# legal_status:
+#   consolidated  - current consolidated text (as revised by the publisher)
+#   historical    - outdated consolidation, kept only to answer "what did the
+#                   text say before?" questions; excluded from default search
+# authority:
+#   official      - published by the Imprimerie Officielle (IORT) / Ministry of Justice
+#   secondary     - reproduction by a third party
+# multi_act: the page range bundles several acts whose article numbering
+#   restarts at 1 (a law and its implementing orders).
+
+volumes:
+  csp_ar_iort_2019.pdf: &iort
+    publisher: "المطبعة الرسمية للجمهورية التونسية (Imprimerie Officielle de la République Tunisienne)"
+    source_url: "https://www.justice.gov.tn/fileadmin/medias/references_juridiques/codes_juridiques/StatutpersonnelArabe.pdf"
+    edition: "منشورات المطبعة الرسمية 2019 — تمت المراجعة والتحيين يوم 16 ماي 2017"
+    sha256: "42b97d7bd070d9f544909106107383bb3d4845e912713cd1b3c96f9f21f1dc47"
+    obtained: "Downloaded by the team from justice.gov.tn and committed to the repo on 2026-10-25"
+
+documents:
+  - doc_id: csp_decree_1956
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [3, 4]
+    title: "أمر علي مؤرخ في 13 أوت 1956 يتعلق بإصدار مجلة الأحوال الشخصية"
+    title_fr: "Décret du 13 août 1956 portant promulgation du Code du statut personnel"
+    publication_date: "1956-08-13"
+    jort: "الرائد الرسمي عدد 66 الصادر في 17 أوت 1956"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: core
+    <<: *iort
+
+  - doc_id: csp
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [5, 39]
+    title: "مجلة الأحوال الشخصية"
+    title_fr: "Code du statut personnel (CSP)"
+    publication_date: "1956-08-13"
+    version_note: "النص المحين إلى غاية 16 ماي 2017 (يتضمن تنقيح القانون عدد 32 لسنة 2007 والقانون عدد 50 لسنة 2010)"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: core
+    <<: *iort
+
+  - doc_id: civil_status_1957
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [45, 62]
+    title: "قانون عدد 3 لسنة 1957 مؤرخ في غرة أوت 1957 يتعلق بتنظيم الحالة المدنية"
+    title_fr: "Loi n° 1957-3 du 1er août 1957 réglementant l'état civil"
+    publication_date: "1957-08-01"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: surname_certificate_2001
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [63, 66]
+    multi_act: true
+    title: "قانون عدد 31 لسنة 2001 مؤرخ في 29 مارس 2001 يتعلق بإحداث شهادة تطابق بين اللقب الأصلي واللقب المسند (وقرار وزير العدل المؤرخ في 17 ماي 2001 المتعلق بنموذجها)"
+    title_fr: "Loi n° 2001-31 du 29 mars 2001 (certificat de concordance entre le nom originel et le nom attribué) et arrêté du 17 mai 2001"
+    publication_date: "2001-03-29"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: civil_status_forms_1985
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [67, 69]
+    title: "قرار من وزير العدل وكاتب الدولة لدى وزير الداخلية مؤرخ في 27 سبتمبر 1985 يتعلق بتوحيد وثائق الحالة المدنية"
+    title_fr: "Arrêté du 27 septembre 1985 relatif à l'unification des documents d'état civil"
+    publication_date: "1985-09-27"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: civil_status_officers_1986
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [71, 72]
+    title: "أمر عدد 132 لسنة 1986 مؤرخ في 22 جانفي 1986 يتعلق بتحديد مرجع النظر الترابي لبعض أصناف من ضباط الحالة المدنية"
+    title_fr: "Décret n° 1986-132 du 22 janvier 1986 (compétence territoriale des officiers d'état civil)"
+    publication_date: "1986-01-22"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: municipal_permanence_2013
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [73, 74]
+    title: "قرار من رئيس الحكومة مؤرخ في 11 جانفي 2013 يتعلق بتنظيم حصص استمرار خارج أيام العمل ببعض المصالح البلدية"
+    title_fr: "Arrêté du Chef du gouvernement du 11 janvier 2013 (permanences des services municipaux)"
+    publication_date: "2013-01-11"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: marital_property_1998
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [77, 82]
+    title: "قانون عدد 94 لسنة 1998 مؤرخ في 9 نوفمبر 1998 يتعلق بنظام الاشتراك في الأملاك بين الزوجين"
+    title_fr: "Loi n° 1998-94 du 9 novembre 1998 relative au régime de la communauté des biens entre époux"
+    publication_date: "1998-11-09"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: premarital_certificate_1964
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [85, 91]
+    multi_act: true
+    title: "قانون عدد 46 لسنة 1964 مؤرخ في 3 نوفمبر 1964 يتعلق بالشهادة الطبية السابقة للزواج (ونصوصه التطبيقية لسنة 1995)"
+    title_fr: "Loi n° 1964-46 du 3 novembre 1964 instituant le certificat médical prénuptial, et arrêtés de 1995"
+    publication_date: "1964-11-03"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: guardianship_adoption_1958
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [95, 98]
+    title: "قانون عدد 27 لسنة 1958 مؤرخ في 4 مارس 1958 يتعلق بالولاية العمومية والكفالة والتبني"
+    title_fr: "Loi n° 1958-27 du 4 mars 1958 relative à la tutelle publique, à la tutelle officieuse et à l'adoption"
+    publication_date: "1958-03-04"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: taqdim_decree_1957
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [101, 107]
+    title: "أمر مؤرخ في 18 جويلية 1957 يتعلق بترتيب تسمية المقدمين ومراقبة تصرفاتهم وحساباتهم"
+    title_fr: "Décret du 18 juillet 1957 relatif à la nomination des curateurs (mokaddems) et au contrôle de leur gestion"
+    publication_date: "1957-07-18"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: surname_abandoned_children_1998
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [111, 115]
+    title: "قانون عدد 75 لسنة 1998 مؤرخ في 28 أكتوبر 1998 يتعلق بإسناد لقب عائلي للأطفال المهملين أو مجهولي النسب"
+    title_fr: "Loi n° 1998-75 du 28 octobre 1998 relative à l'attribution d'un nom patronymique aux enfants abandonnés ou de filiation inconnue"
+    publication_date: "1998-10-28"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: alimony_fund_1993
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [119, 121]
+    title: "قانون عدد 65 لسنة 1993 مؤرخ في 5 جويلية 1993 يتعلق بإحداث صندوق ضمان النفقة وجراية الطلاق"
+    title_fr: "Loi n° 1993-65 du 5 juillet 1993 portant création d'un fonds de garantie de la pension alimentaire et de la rente de divorce"
+    publication_date: "1993-07-05"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: alimony_fund_decree_1993
+    file: csp_ar_iort_2019.pdf
+    ocr_cache: csp_ar_iort_2019
+    pages: [123, 126]
+    title: "أمر عدد 1655 لسنة 1993 مؤرخ في 9 أوت 1993 يتعلق بإجراءات تدخل صندوق ضمان النفقة وجراية الطلاق"
+    title_fr: "Décret n° 1993-1655 du 9 août 1993 relatif aux procédures d'intervention du fonds de garantie de la pension alimentaire et de la rente de divorce"
+    publication_date: "1993-08-09"
+    language: ar
+    extraction: ocr
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort
+
+  - doc_id: csp_cawtar_historical
+    file: csp_ar_cawtar.pdf
+    pages: [1, 26]
+    notes_pages: [23, 26]
+    title: "مجلة الأحوال الشخصية — نسخة مركز المرأة العربية للتدريب والبحوث (كوثر) مع هوامش الصيغ السابقة"
+    title_fr: "Code du statut personnel — reproduction CAWTAR, avec notes sur les rédactions antérieures"
+    publisher: "مركز المرأة العربية للتدريب والبحوث (كوثر / CAWTAR)"
+    source_url: null
+    obtained: "PDF supplied by the team (CAWTAR web reproduction); original URL not recorded"
+    sha256: "af1688643f589ae81166024c7ed131f67d8267e509da22b8784cc16294fa1078"
+    version_note: "نسخة غير محينة: سابقة لتنقيح 2007 (الفصل 5) و2010 (الفصل 32). تستعمل فقط للإجابة عن الصيغ التاريخية للفصول."
+    language: ar
+    extraction: text
+    authority: secondary
+    legal_status: historical
+    collection: historical

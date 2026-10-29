@@ -1,0 +1,156 @@
+{
+ "tag": "probe_top5",
+ "mode": "hybrid_rerank",
+ "settings": {
+  "top_k": 5,
+  "rerank_k": 20,
+  "candidate_k": 20,
+  "max_context_chars": 6000,
+  "llm_provider": "llamacpp",
+  "llm_model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+  "llm_max_tokens": 512,
+  "min_rerank_score": 0.01,
+  "skip_rerank_when_confident": false,
+  "query_cache_size": 0,
+  "llm_prompt_cache": false,
+  "embedding_model": "multilingual-e5-large",
+  "reranker_model": "bge-reranker-v2-m3"
+ },
+ "support_threshold": 0.5,
+ "overall": {
+  "n": 8,
+  "answer_correctness": 0.4286,
+  "n_graded_correctness": 7,
+  "faithfulness_sentence_support": 0.3333,
+  "answers_with_unsupported_numbers": 2,
+  "answers_with_unverified_articles": 0,
+  "citation_precision": 0.25,
+  "answers_citing_gold": 0.3333,
+  "abstention_on_unanswerable": 1.0,
+  "false_abstention_on_answerable": 0.1429,
+  "forbidden_claims": 0,
+  "latency": {
+   "p50_ms": 45611.9,
+   "p95_ms": 56237.4,
+   "mean_ms": 39844.3,
+   "n": 8
+  },
+  "mean_input_tokens": 1354.6,
+  "mean_output_tokens": 55.1,
+  "mean_cost_usd": 0.0019510964178611138
+ },
+ "by_language": {
+  "ar": {
+   "n": 6,
+   "answer_correctness": 0.4,
+   "n_graded_correctness": 5,
+   "faithfulness_sentence_support": 0.25,
+   "answers_with_unsupported_numbers": 1,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.25,
+   "answers_citing_gold": 0.25,
+   "abstention_on_unanswerable": 1.0,
+   "false_abstention_on_answerable": 0.2,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 35829.0,
+    "p95_ms": 49527.4,
+    "mean_ms": 34611.4,
+    "n": 6
+   },
+   "mean_input_tokens": 1247.2,
+   "mean_output_tokens": 39.5,
+   "mean_cost_usd": 0.0015728875577500042
+  },
+  "en": {
+   "n": 1,
+   "answer_correctness": 1.0,
+   "n_graded_correctness": 1,
+   "faithfulness_sentence_support": 1.0,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.5,
+   "answers_citing_gold": 1.0,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 0.0,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 53228.6,
+    "p95_ms": 53228.6,
+    "mean_ms": 53228.6,
+    "n": 1
+   },
+   "mean_input_tokens": 1534.0,
+   "mean_output_tokens": 113.0,
+   "mean_cost_usd": 0.0029571433934999936
+  },
+  "fr": {
+   "n": 1,
+   "answer_correctness": 0.0,
+   "n_graded_correctness": 1,
+   "faithfulness_sentence_support": 0.0,
+   "answers_with_unsupported_numbers": 1,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.0,
+   "answers_citing_gold": 0.0,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 0.0,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 57857.5,
+    "p95_ms": 57857.5,
+    "mean_ms": 57857.5,
+    "n": 1
+   },
+   "mean_input_tokens": 1820.0,
+   "mean_output_tokens": 91.0,
+   "mean_cost_usd": 0.0032143026028888925
+  }
+ },
+ "by_category": {
+  "factual": {
+   "n": 7,
+   "answer_correctness": 0.4286,
+   "n_graded_correctness": 7,
+   "faithfulness_sentence_support": 0.3333,
+   "answers_with_unsupported_numbers": 2,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": 0.25,
+   "answers_citing_gold": 0.3333,
+   "abstention_on_unanswerable": null,
+   "false_abstention_on_answerable": 0.1429,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 48266.2,
+    "p95_ms": 56468.8,
+    "mean_ms": 44193.9,
+    "n": 7
+   },
+   "mean_input_tokens": 1548.1,
+   "mean_output_tokens": 63.0,
+   "mean_cost_usd": 0.0022298244775555585
+  },
+  "unanswerable": {
+   "n": 1,
+   "answer_correctness": null,
+   "n_graded_correctness": 0,
+   "faithfulness_sentence_support": null,
+   "answers_with_unsupported_numbers": 0,
+   "answers_with_unverified_articles": 0,
+   "citation_precision": null,
+   "answers_citing_gold": 0.0,
+   "abstention_on_unanswerable": 1.0,
+   "false_abstention_on_answerable": null,
+   "forbidden_claims": 0,
+   "latency": {
+    "p50_ms": 9397.0,
+    "p95_ms": 9397.0,
+    "mean_ms": 9397.0,
+    "n": 1
+   },
+   "mean_input_tokens": 0.0,
+   "mean_output_tokens": 0.0,
+   "mean_cost_usd": 0.0
+  }
+ }
+}
