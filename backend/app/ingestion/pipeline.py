@@ -16,7 +16,7 @@ from pathlib import Path
 from ..core.config import Settings
 from .chunker import chunk_article_units, chunk_fixed, finalize
 from .loader import load_pages, load_sources
-from .structure import parse_units
+from .structure import parse_units, parse_units_fr
 
 log = logging.getLogger(__name__)
 
@@ -29,8 +29,11 @@ def build_chunks(settings: Settings, strategy: str | None = None, max_chars: int
     all_chunks, report = [], {"documents": [], "strategy": strategy, "max_chars": max_chars, "overlap": overlap}
     for src in load_sources(settings.sources_file):
         pages = load_pages(src, settings.data_dir)
-        units = parse_units(src.doc_id, pages, src.notes_pages, trust_numbers=src.extraction == "text",
-                            allow_restart=bool(src.extra.get("multi_act")))
+        if src.language == "fr":
+            units = parse_units_fr(src.doc_id, pages, allow_restart=bool(src.extra.get("multi_act")))
+        else:
+            units = parse_units(src.doc_id, pages, src.notes_pages, trust_numbers=src.extraction == "text",
+                                allow_restart=bool(src.extra.get("multi_act")))
         if strategy == "fixed":
             chunks = chunk_fixed(src, units, max_chars, overlap)
         else:
@@ -38,7 +41,8 @@ def build_chunks(settings: Settings, strategy: str | None = None, max_chars: int
         arts = [u for u in units if u.unit_type == "article"]
         nums = sorted({u.article_number for u in arts if u.article_number})
         report["documents"].append({
-            "doc_id": src.doc_id, "title": src.title, "legal_status": src.legal_status,
+            "doc_id": src.doc_id, "work_id": src.work_id or src.doc_id, "language": src.language,
+            "title": src.title, "legal_status": src.legal_status,
             "authority": src.authority, "pages": len(pages),
             "page_range": [pages[0].page, pages[-1].page] if pages else None,
             "characters": sum(len(p.text) for p in pages),

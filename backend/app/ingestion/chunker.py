@@ -23,7 +23,7 @@ from dataclasses import asdict
 
 from .loader import SourceDoc
 from .normalize import search_form
-from .structure import Unit
+from .structure import Unit, fr_display_label
 
 
 def _context(src: SourceDoc, u: Unit) -> str:
@@ -32,7 +32,8 @@ def _context(src: SourceDoc, u: Unit) -> str:
         if p:
             parts.append(p)
     if u.unit_type == "article":
-        parts.append(f"الفصل {u.article_label}")
+        parts.append(f"Article {fr_display_label(u.article_label)}" if src.language == "fr"
+                     else f"الفصل {u.article_label}")
     elif u.unit_type == "note":
         parts.append(f"هامش [{u.note_number}] (صيغة سابقة / ملاحظة تاريخية)")
     return " › ".join(parts)
@@ -66,7 +67,8 @@ def _split_long(text: str, max_chars: int, overlap: int) -> list[str]:
 
 def _base(src: SourceDoc) -> dict:
     return {
-        "doc_id": src.doc_id, "doc_title": src.title, "doc_title_fr": src.title_fr,
+        "doc_id": src.doc_id, "work_id": src.work_id or src.doc_id,
+        "doc_title": src.title, "doc_title_fr": src.title_fr,
         "source_url": src.source_url, "publisher": src.publisher, "edition": src.edition,
         "publication_date": src.publication_date, "language": src.language,
         "authority": src.authority, "legal_status": src.legal_status, "collection": src.collection,
@@ -101,9 +103,11 @@ def chunk_article_units(src: SourceDoc, units: list[Unit], max_chars: int, overl
                 "chunk_id": f"{src.doc_id}:{key}:{n}",
                 "chunk_type": u.unit_type,
                 "article_label": u.article_label,
+                "article_label_display": (fr_display_label(u.article_label) if src.language == "fr"
+                                          else u.article_label),
                 "part": n, "parts": len(pieces),
                 "text": piece,
-                "embed_text": ctx + (f" (جزء {n}/{len(pieces)})" if len(pieces) > 1 else "") + "\n" + piece,
+                "embed_text": ctx + (f" ({n}/{len(pieces)})" if len(pieces) > 1 else "") + "\n" + piece,
                 "context": ctx,
             }
             chunks.append(chunk)
@@ -132,6 +136,7 @@ def chunk_fixed(src: SourceDoc, units: list[Unit], max_chars: int, overlap: int)
             "article_number": first.article_number if first else None,
             "article_suffix": first.article_suffix if first else None,
             "article_label": first.article_label if first else None,
+            "article_label_display": first.article_label if first else None,
             "covered_articles": [u.article_label for u in arts],
             "page_start": covered[0].page_start if covered else None,
             "page_end": covered[-1].page_end if covered else None,

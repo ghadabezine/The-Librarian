@@ -296,3 +296,156 @@ def _parse_notes(doc_id: str, lines: list[tuple[int, str]]) -> list[Unit]:
             u.article_number = int(first.group(1))
             u.article_suffix = "مكرر" if first.group(2) else None
     return units
+
+
+# --------------------------------------------------------------------------- French
+# The official French edition has a clean text layer. Article headers look like
+# "Article premier.-", "Article 66 bis (Ajouté par Art. 2 de la loi n°2006-10 ...).-";
+# footnotes sit below a "__________" rule; every page carries the watermark text.
+
+FR_SUFFIXES = {"bis": "مكرر", "ter": "ثالثا", "quater": "رابعا", "quinquies": "خامسا"}
+FR_SUFFIX_NAMES = {v: k for k, v in FR_SUFFIXES.items()}
+FR_ARTICLE_START = re.compile(
+    r"^\s*Article\s+(?P<num>premier|Premier|PREMIER|1er|\d{1,3})(?:\s*(?P<suf>bis|ter|quater|quinquies)\b)?"
+    r"\s*(?P<rest>.*)$")
+FR_ARTICLE_GROUP = re.compile(r"^\s*Articles\s+(?P<nums>\d{1,3}(?:\s*[-,et]+\s*\d{1,3})+)\s*\.?-")
+FR_HEADING = re.compile(r"^\s*(?P<kind>LIVRE|CHAPITRE|Chapitre|TITRE|Titre|SECTION|Section)\b(?P<rest>.*)$")
+FR_WATERMARK = re.compile(r"^\s*Imprimerie Officielle de la R[ée]publique Tunisienne\s*$")
+FR_RULE = re.compile(r"^\s*_{5,}\s*$")
+FR_LAW_REF = re.compile(r"(loi|décret-loi|décret|arrêté)\s+n\s*°\s*(\d{2,4})\s*-\s*(\d{1,4})", re.IGNORECASE)
+FR_MENTION = re.compile(r"\barticles?\s+(\d{1,3})(?:\s+(bis|ter|quater))?", re.IGNORECASE)
+
+
+def fr_display_label(label: str | None) -> str | None:
+    if not label:
+        return label
+    num, _, suf = label.partition(" ")
+    return num + (f" {FR_SUFFIX_NAMES.get(suf, suf)}" if suf else "")
+
+
+def _fr_lines(pages: list[Page]) -> list[tuple[int, str, bool]]:
+    """(page, line, is_footnote); drops watermark and page-number lines."""
+    out = []
+    for page in pages:
+        footnote = False
+        lines = [l.strip() for l in page.text.split("\n")]
+        k = 0
+        while k < len(lines):
+            line = lines[k]
+            if not line or FR_WATERMARK.match(line) or PAGE_NUMBER.match(line):
+                k += 1
+                continue
+            if FR_RULE.match(line):
+                footnote = True
+                k += 1
+                continue
+            if line == "Article" and k + 1 < len(lines):   # header broken after the word
+                line = "Article " + lines[k + 1].strip()
+                k += 1
+            out.append((page.page, line, footnote))
+            k += 1
+    return out
+
+
+def _fr_amendment_info(head: str) -> tuple[list[str], list[str], bool]:
+    m = re.match(r"^\s*Articles?\s+[^(]*?(\((?:[^()]|\([^()]*\))*\))", head)
+    amendments = [m.group(1)] if m else []
+    laws = [f"{a.group(1).lower()} n°{a.group(2)}-{a.group(3)}" for x in amendments for a in FR_LAW_REF.finditer(x)]
+    repealed = any(re.search(r"abrog", x, re.I) and not re.search(r"remplac", x, re.I) for x in amendments)
+    return amendments, list(dict.fromkeys(laws)), repealed
+
+
+def parse_units_fr(doc_id: str, pages: list[Page], allow_restart: bool = False) -> list[Unit]:
+    lines = _fr_lines(pages)
+    units: list[Unit] = []
+    book = section = heading = None
+    pending: list[str] = []
+    cur: Unit | None = None
+    buf: list[str] = []
+
+    def flush():
+        nonlocal cur, buf
+        if cur is not None:
+            cur.text = "\n".join(buf).strip()
+            if cur.footnotes:
+                cur.text += "\n" + "\n".join("[Note] " + f for f in cur.footnotes)
+            if cur.unit_type == "article":
+                cur.amendments, cur.amending_laws, cur.repealed = _fr_amendment_info(cur.text[:500])
+            if cur.text:
+                units.append(cur)
+                for n in cur.group[1:]:
+                    units.append(replace(cur, article_number=n, group=[]))
+        cur, buf = None, []
+
+    for i, (page, line, is_note) in enumerate(lines):
+        if is_note:
+            if cur is not None:
+                if FOOTNOTE.match(line) or not cur.footnotes:
+                    cur.footnotes.append(line)
+                else:
+                    cur.footnotes[-1] += " " + line
+            continue
+        m_head = FR_HEADING.match(line)
+        if m_head and len(line) <= 70 and not line.endswith("."):
+            flush()
+            nxt = lines[i + 1][1] if i + 1 < len(lines) else ""
+            title = line
+            if nxt and nxt.isupper() and len(nxt) <= 70 and not FR_ARTICLE_START.match(nxt):
+                title += " : " + nxt
+                pending = []
+            if m_head.group("kind").upper() == "LIVRE":
+                book, section, heading = title, None, None
+            else:
+                section, heading = title, None
+            continue
+        if title_consumed(lines, i):
+            continue
+        m_group = FR_ARTICLE_GROUP.match(line)
+        if m_group:
+            flush()
+            nums = [int(n) for n in re.findall(r"\d+", m_group.group("nums"))]
+            cur = Unit(doc_id, "article", "", page, page, nums[0], None, False, book, section, heading, group=nums)
+            buf = [line]
+            continue
+        m_art = FR_ARTICLE_START.match(line)
+        rest = (m_art.group("rest") or "").strip() if m_art else ""
+        if m_art and rest.startswith((".-", "(", "-", ".–", "–", ". -", ". (")):
+            flush()
+            raw = m_art.group("num")
+            number = 1 if raw.lower() in ("premier", "1er") else int(raw)
+            suffix = FR_SUFFIXES.get((m_art.group("suf") or "").lower())
+            if pending:
+                heading = " ".join(pending)
+                pending = []
+            cur = Unit(doc_id, "article", "", page, page, number, suffix, False, book, section, heading)
+            buf = [line]
+            continue
+        # Short line directly before an article: a sub-heading ("De la dot").
+        nxt = lines[i + 1][1] if i + 1 < len(lines) else ""
+        prev = lines[i - 1][1] if i > 0 else ""
+        if (len(line) <= 60 and len(line.split()) <= 8 and not line.endswith((".", ",", ";", ":"))
+                and FR_ARTICLE_START.match(nxt) and (not prev or prev.endswith((".", ":", ")")) or prev.isupper())):
+            if cur is not None and cur.unit_type == "article":
+                flush()
+            pending.append(line)
+            continue
+        if cur is None:
+            cur = Unit(doc_id, "preamble", "", page, page, None, None, False, book, section, heading)
+            buf = []
+        cur.page_end = page
+        buf.append(line)
+    flush()
+    for u in units:
+        u.mentions = list(dict.fromkeys(
+            m.group(1) + (f" {FR_SUFFIXES[m.group(2).lower()]}" if m.group(2) else "")
+            for m in FR_MENTION.finditer(u.text)))
+    return units
+
+
+def title_consumed(lines, i) -> bool:
+    """True for the uppercase title line that was already joined to a heading."""
+    if i == 0:
+        return False
+    prev = lines[i - 1][1]
+    line = lines[i][1]
+    return bool(FR_HEADING.match(prev)) and line.isupper() and len(line) <= 70 and not FR_ARTICLE_START.match(line)

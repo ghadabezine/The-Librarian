@@ -45,6 +45,7 @@ class SourceDoc:
     ocr_cache: str | None = None          # data/ocr/<ocr_cache>/ (shared by sub-documents of one PDF)
     title_fr: str | None = None
     collection: str = "core"              # core | annex | historical
+    work_id: str | None = None            # same legal text in another language -> same work_id
     extra: dict = field(default_factory=dict)
 
 

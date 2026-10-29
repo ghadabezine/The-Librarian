@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     min_rerank_score: float = 0.01   # calibrated in eval/results/rerank_simulation.md
     # Skip the reranker when BM25 and dense agree strongly on the top hit (optimisation).
     skip_rerank_when_confident: bool = False
+    # Keep only the best-ranked language version of an article in the results,
+    # so the top-k holds k distinct provisions instead of translations.
+    collapse_translations: bool = True
 
     # Generation
     llm_provider: Literal["llamacpp", "anthropic", "extractive"] = "llamacpp"

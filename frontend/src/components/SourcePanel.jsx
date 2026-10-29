@@ -23,6 +23,7 @@ export default function SourcePanel({ t, response, activeId, onSelect }) {
         const isActive = s.id === activeId;
         const historical = s.legal_status === "historical";
         const link = pdfLink(s);
+        const fr = s.language === "fr";
         return (
           <article key={s.chunk_id} ref={(el) => (refs.current[s.id] = el)} onClick={() => onSelect(s.id)}
             className={`cursor-pointer rounded-xl border bg-white p-3 text-sm shadow-sm transition
@@ -37,16 +38,18 @@ export default function SourcePanel({ t, response, activeId, onSelect }) {
               </span>
               {s.repealed && <span className="rounded bg-tn/10 px-1.5 py-0.5 text-tn">ملغى / abrogé</span>}
             </header>
-            <h3 dir="rtl" className="font-ar font-semibold leading-7">
-              {s.article_label && s.chunk_type === "article" ? `الفصل ${s.article_label} — ` : ""}{s.doc_title}
+            <h3 dir={fr ? "ltr" : "rtl"} className={`${fr ? "" : "font-ar"} font-semibold leading-7`}>
+              {s.article_label && s.chunk_type === "article"
+                ? `${fr ? "Article" : "الفصل"} ${s.article_label_display || s.article_label} — ` : ""}{s.doc_title}
             </h3>
-            {s.doc_title_fr && <p className="text-xs text-ink-soft">{s.doc_title_fr}</p>}
+            {!fr && s.doc_title_fr && <p className="text-xs text-ink-soft">{s.doc_title_fr}</p>}
+            <p className="text-[11px] text-ink-soft/70">{fr ? "Version française officielle (IORT 2024)" : "النص العربي الرسمي"}</p>
             <p className="mt-1 text-xs text-ink-soft">
               {s.page_start ? `${t.page} ${s.page_start}${s.page_end && s.page_end !== s.page_start ? `–${s.page_end}` : ""}` : ""}
               {s.amending_laws?.length ? ` · ${t.amendedBy}: ${s.amending_laws.join("، ")}` : ""}
             </p>
-            <blockquote dir="rtl" lang="ar"
-              className={`legal-text mt-2 border-s-4 ps-3 text-[14px] ${isActive ? "border-tn" : "border-sand-dark"} ${isActive ? "" : "line-clamp-5"}`}>
+            <blockquote dir={fr ? "ltr" : "rtl"} lang={fr ? "fr" : "ar"}
+              className={`${fr ? "leading-7 whitespace-pre-wrap" : "legal-text"} mt-2 border-s-4 ps-3 text-[14px] ${isActive ? "border-tn" : "border-sand-dark"} ${isActive ? "" : "line-clamp-5"}`}>
               {s.text}
             </blockquote>
             {link && (

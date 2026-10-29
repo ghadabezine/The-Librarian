@@ -62,6 +62,8 @@ def _source_view(c: dict, sid: int, rerank: float | None = None) -> dict:
     return {
         "id": f"S{sid}", "chunk_id": c["chunk_id"], "doc_id": c["doc_id"], "doc_title": c["doc_title"],
         "doc_title_fr": c.get("doc_title_fr"), "article_label": c.get("article_label"),
+        "article_label_display": c.get("article_label_display"), "language": c.get("language"),
+        "work_id": c.get("work_id"),
         "chunk_type": c.get("chunk_type"), "context": c.get("context"), "text": c["text"],
         "page_start": c.get("page_start"), "page_end": c.get("page_end"), "source_url": c.get("source_url"),
         "legal_status": c.get("legal_status"), "authority": c.get("authority"),

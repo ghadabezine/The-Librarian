@@ -3,89 +3,89 @@
   {
    "depth": 20,
    "skip_confident": false,
-   "recall@1": 0.8033,
-   "recall@3": 0.9399,
-   "recall@5": 0.9727,
+   "recall@1": 0.7882,
+   "recall@3": 0.8818,
+   "recall@5": 0.9015,
    "reranked_share": 1.0,
-   "rerank_p50_ms": 7052,
-   "rerank_p95_ms": 9991
+   "rerank_p50_ms": 5675,
+   "rerank_p95_ms": 7990
   },
   {
    "depth": 20,
    "skip_confident": true,
-   "recall@1": 0.7978,
-   "recall@3": 0.9344,
-   "recall@5": 0.9727,
-   "reranked_share": 0.519,
-   "rerank_p50_ms": 4572,
-   "rerank_p95_ms": 9850
+   "recall@1": 0.7635,
+   "recall@3": 0.867,
+   "recall@5": 0.9064,
+   "reranked_share": 0.473,
+   "rerank_p50_ms": 0,
+   "rerank_p95_ms": 7395
   },
   {
    "depth": 10,
    "skip_confident": false,
-   "recall@1": 0.7978,
-   "recall@3": 0.9454,
-   "recall@5": 0.9727,
+   "recall@1": 0.7833,
+   "recall@3": 0.8719,
+   "recall@5": 0.8768,
    "reranked_share": 1.0,
-   "rerank_p50_ms": 3526,
-   "rerank_p95_ms": 4996
+   "rerank_p50_ms": 2838,
+   "rerank_p95_ms": 3995
   },
   {
    "depth": 10,
    "skip_confident": true,
-   "recall@1": 0.7923,
-   "recall@3": 0.9399,
-   "recall@5": 0.9727,
-   "reranked_share": 0.519,
-   "rerank_p50_ms": 2286,
-   "rerank_p95_ms": 4925
+   "recall@1": 0.7586,
+   "recall@3": 0.8571,
+   "recall@5": 0.8818,
+   "reranked_share": 0.473,
+   "rerank_p50_ms": 0,
+   "rerank_p95_ms": 3697
   },
   {
    "depth": 8,
    "skip_confident": false,
-   "recall@1": 0.7978,
-   "recall@3": 0.9344,
-   "recall@5": 0.9617,
+   "recall@1": 0.7833,
+   "recall@3": 0.867,
+   "recall@5": 0.8719,
    "reranked_share": 1.0,
-   "rerank_p50_ms": 2821,
-   "rerank_p95_ms": 3997
+   "rerank_p50_ms": 2270,
+   "rerank_p95_ms": 3196
   },
   {
    "depth": 8,
    "skip_confident": true,
-   "recall@1": 0.7869,
-   "recall@3": 0.929,
-   "recall@5": 0.9617,
-   "reranked_share": 0.519,
-   "rerank_p50_ms": 1829,
-   "rerank_p95_ms": 3940
+   "recall@1": 0.7586,
+   "recall@3": 0.8522,
+   "recall@5": 0.8768,
+   "reranked_share": 0.473,
+   "rerank_p50_ms": 0,
+   "rerank_p95_ms": 2958
   },
   {
    "depth": 5,
    "skip_confident": false,
-   "recall@1": 0.7814,
-   "recall@3": 0.8962,
-   "recall@5": 0.9126,
+   "recall@1": 0.7734,
+   "recall@3": 0.8424,
+   "recall@5": 0.9113,
    "reranked_share": 1.0,
-   "rerank_p50_ms": 1763,
-   "rerank_p95_ms": 2498
+   "rerank_p50_ms": 1419,
+   "rerank_p95_ms": 1997
   },
   {
    "depth": 5,
    "skip_confident": true,
-   "recall@1": 0.7705,
-   "recall@3": 0.8907,
-   "recall@5": 0.9126,
-   "reranked_share": 0.519,
-   "rerank_p50_ms": 1143,
-   "rerank_p95_ms": 2462
+   "recall@1": 0.7488,
+   "recall@3": 0.8276,
+   "recall@5": 0.9113,
+   "reranked_share": 0.473,
+   "rerank_p50_ms": 0,
+   "rerank_p95_ms": 1849
   },
   {
    "depth": 0,
    "skip_confident": false,
-   "recall@1": 0.6612,
-   "recall@3": 0.8306,
-   "recall@5": 0.9126,
+   "recall@1": 0.6601,
+   "recall@3": 0.8325,
+   "recall@5": 0.9113,
    "reranked_share": 0.0,
    "rerank_p50_ms": 0,
    "rerank_p95_ms": 0
@@ -99,48 +99,48 @@
   },
   {
    "threshold": 0.005,
-   "false_abstention": 0.0055,
-   "abstention_unanswerable": 0.5
+   "false_abstention": 0.0,
+   "abstention_unanswerable": 0.2857
   },
   {
    "threshold": 0.01,
-   "false_abstention": 0.0273,
-   "abstention_unanswerable": 0.6429
+   "false_abstention": 0.0099,
+   "abstention_unanswerable": 0.4286
   },
   {
    "threshold": 0.02,
-   "false_abstention": 0.0437,
-   "abstention_unanswerable": 0.8571
+   "false_abstention": 0.0197,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.03,
-   "false_abstention": 0.0601,
-   "abstention_unanswerable": 0.8571
+   "false_abstention": 0.0296,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.05,
-   "false_abstention": 0.0874,
-   "abstention_unanswerable": 0.8571
+   "false_abstention": 0.0443,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.08,
-   "false_abstention": 0.0984,
-   "abstention_unanswerable": 0.9286
+   "false_abstention": 0.064,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.1,
-   "false_abstention": 0.1093,
-   "abstention_unanswerable": 0.9286
+   "false_abstention": 0.0739,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.15,
-   "false_abstention": 0.1475,
-   "abstention_unanswerable": 0.9286
+   "false_abstention": 0.0936,
+   "abstention_unanswerable": 0.7143
   },
   {
    "threshold": 0.2,
-   "false_abstention": 0.153,
-   "abstention_unanswerable": 1.0
+   "false_abstention": 0.0985,
+   "abstention_unanswerable": 0.7857
   }
  ]
 }

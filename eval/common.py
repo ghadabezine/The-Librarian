@@ -19,12 +19,13 @@ def load_items(path: Path | None = None) -> list[dict]:
 
 
 def is_gold(chunk: dict, gold: list[str]) -> bool:
-    """A chunk is relevant if it belongs to one of the gold articles.
+    """A chunk is relevant if it belongs to one of the gold articles, in either language.
 
     Fixed-window chunks may span several articles: they count if any covered
     article is gold."""
     labels = chunk.get("covered_articles") or [chunk.get("article_label")]
-    return any(f"{chunk['doc_id']}:{lab}" in gold for lab in labels if lab)
+    docs = {chunk["doc_id"], chunk.get("work_id") or chunk["doc_id"]}
+    return any(f"{d}:{lab}" in gold for d in docs for lab in labels if lab)
 
 
 def percentile(values: list[float], p: float) -> float:

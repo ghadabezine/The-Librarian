@@ -20,8 +20,16 @@ volumes:
     sha256: "42b97d7bd070d9f544909106107383bb3d4845e912713cd1b3c96f9f21f1dc47"
     obtained: "Downloaded by the team from justice.gov.tn and committed to the repo on 2026-10-25"
 
+  csp_fr_iort_2024.pdf: &iort_fr
+    publisher: "Imprimerie Officielle de la République Tunisienne (IORT)"
+    source_url: null
+    edition: "Publications de l'IORT 2024 — édition revue et corrigée le 05 février 2024"
+    sha256: "da1264c21fad10e509b1ad745efc9a6636767807a5631aeb2ffcb15d511e5334"
+    obtained: "Official IORT PDF supplied by the team and committed to the repo on 2026-10-29"
+
 documents:
   - doc_id: csp_decree_1956
+    work_id: csp_decree_1956
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [3, 4]
@@ -37,13 +45,14 @@ documents:
     <<: *iort
 
   - doc_id: csp
+    work_id: csp
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [5, 39]
     title: "مجلة الأحوال الشخصية"
     title_fr: "Code du statut personnel (CSP)"
     publication_date: "1956-08-13"
-    version_note: "النص المحين إلى غاية 16 ماي 2017 (يتضمن تنقيح القانون عدد 32 لسنة 2007 والقانون عدد 50 لسنة 2010)"
+    version_note: "النص المحين إلى غاية 16 ماي 2017 (يتضمن تنقيح القانون عدد 32 لسنة 2007 والقانون عدد 50 لسنة 2010). لا تذكر طبعة 2024 الفرنسية أي تنقيح لاحق للمجلة."
     language: ar
     extraction: ocr
     authority: official
@@ -52,6 +61,7 @@ documents:
     <<: *iort
 
   - doc_id: civil_status_1957
+    work_id: civil_status_1957
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [45, 62]
@@ -66,6 +76,7 @@ documents:
     <<: *iort
 
   - doc_id: surname_certificate_2001
+    work_id: surname_certificate_2001
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [63, 66]
@@ -81,6 +92,7 @@ documents:
     <<: *iort
 
   - doc_id: civil_status_forms_1985
+    work_id: civil_status_forms_1985
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [67, 69]
@@ -95,6 +107,7 @@ documents:
     <<: *iort
 
   - doc_id: civil_status_officers_1986
+    work_id: civil_status_officers_1986
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [71, 72]
@@ -123,6 +136,7 @@ documents:
     <<: *iort
 
   - doc_id: marital_property_1998
+    work_id: marital_property_1998
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [77, 82]
@@ -137,6 +151,7 @@ documents:
     <<: *iort
 
   - doc_id: premarital_certificate_1964
+    work_id: premarital_certificate_1964
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [85, 91]
@@ -152,6 +167,7 @@ documents:
     <<: *iort
 
   - doc_id: guardianship_adoption_1958
+    work_id: guardianship_adoption_1958
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [95, 98]
@@ -166,6 +182,7 @@ documents:
     <<: *iort
 
   - doc_id: taqdim_decree_1957
+    work_id: taqdim_decree_1957
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [101, 107]
@@ -180,6 +197,7 @@ documents:
     <<: *iort
 
   - doc_id: surname_abandoned_children_1998
+    work_id: surname_abandoned_children_1998
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [111, 115]
@@ -194,6 +212,7 @@ documents:
     <<: *iort
 
   - doc_id: alimony_fund_1993
+    work_id: alimony_fund_1993
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [119, 121]
@@ -208,6 +227,7 @@ documents:
     <<: *iort
 
   - doc_id: alimony_fund_decree_1993
+    work_id: alimony_fund_decree_1993
     file: csp_ar_iort_2019.pdf
     ocr_cache: csp_ar_iort_2019
     pages: [123, 126]
@@ -237,3 +257,215 @@ documents:
     authority: secondary
     legal_status: historical
     collection: historical
+
+  # ---------------------------------------------------------------- official French edition (2024)
+
+  - doc_id: csp_decree_1956_fr
+    work_id: csp_decree_1956
+    file: csp_fr_iort_2024.pdf
+    pages: [3, 4]
+    title: "Décret du 13 août 1956 portant promulgation du Code du statut personnel"
+    title_fr: "Décret du 13 août 1956 portant promulgation du Code du statut personnel"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: core
+    <<: *iort_fr
+
+  - doc_id: csp_fr
+    work_id: csp
+    file: csp_fr_iort_2024.pdf
+    pages: [5, 51]
+    title: "Code du statut personnel"
+    title_fr: "Code du statut personnel"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: core
+    <<: *iort_fr
+
+  - doc_id: civil_status_1957_fr
+    work_id: civil_status_1957
+    file: csp_fr_iort_2024.pdf
+    pages: [55, 75]
+    title: "Loi n°57-3 du 1er août 1957 réglementant l'état civil"
+    title_fr: "Loi n°57-3 du 1er août 1957 réglementant l'état civil"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: citizen_id_2020_fr
+    work_id: citizen_id_2020
+    file: csp_fr_iort_2024.pdf
+    pages: [77, 85]
+    title: "Décret gouvernemental n°2020-312 du 15 mai 2020 fixant le contenu et les spécifications techniques de l'identifiant unique citoyen et les règles régissant la tenue et la gestion de son registre"
+    title_fr: "Décret gouvernemental n°2020-312 du 15 mai 2020 fixant le contenu et les spécifications techniques de l'identifiant unique citoyen et les règles régissant la tenue et la gestion de son registre"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: surname_certificate_2001_fr
+    work_id: surname_certificate_2001
+    file: csp_fr_iort_2024.pdf
+    pages: [87, 89]
+    multi_act: true
+    title: "Loi n°2001-31 du 29 mars 2001 portant création d'une attestation de conformité entre le nom originaire et le nom attribué, et arrêté du 17 mai 2001"
+    title_fr: "Loi n°2001-31 du 29 mars 2001 portant création d'une attestation de conformité entre le nom originaire et le nom attribué, et arrêté du 17 mai 2001"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: civil_status_forms_1985_fr
+    work_id: civil_status_forms_1985
+    file: csp_fr_iort_2024.pdf
+    pages: [91, 93]
+    title: "Arrêté du 27 septembre 1985 relatif à la standardisation des documents de l'état civil"
+    title_fr: "Arrêté du 27 septembre 1985 relatif à la standardisation des documents de l'état civil"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: civil_status_officers_1986_fr
+    work_id: civil_status_officers_1986
+    file: csp_fr_iort_2024.pdf
+    pages: [95, 96]
+    title: "Décret n°86-132 du 22 janvier 1986 déterminant la compétence territoriale de certaines catégories d'officiers de l'état civil"
+    title_fr: "Décret n°86-132 du 22 janvier 1986 déterminant la compétence territoriale de certaines catégories d'officiers de l'état civil"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: marital_property_1998_fr
+    work_id: marital_property_1998
+    file: csp_fr_iort_2024.pdf
+    pages: [97, 104]
+    title: "Loi n°98-94 du 9 novembre 1998 relative au régime de la communauté des biens entre époux"
+    title_fr: "Loi n°98-94 du 9 novembre 1998 relative au régime de la communauté des biens entre époux"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: premarital_certificate_1964_fr
+    work_id: premarital_certificate_1964
+    file: csp_fr_iort_2024.pdf
+    pages: [105, 111]
+    multi_act: true
+    title: "Loi n°64-46 du 3 novembre 1964 portant institution d'un certificat médical prénuptial, et arrêtés de 1995"
+    title_fr: "Loi n°64-46 du 3 novembre 1964 portant institution d'un certificat médical prénuptial, et arrêtés de 1995"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: guardianship_adoption_1958_fr
+    work_id: guardianship_adoption_1958
+    file: csp_fr_iort_2024.pdf
+    pages: [113, 116]
+    title: "Loi n°58-27 du 4 mars 1958 relative à la tutelle publique, à la tutelle officieuse et à l'adoption"
+    title_fr: "Loi n°58-27 du 4 mars 1958 relative à la tutelle publique, à la tutelle officieuse et à l'adoption"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: taqdim_decree_1957_fr
+    work_id: taqdim_decree_1957
+    file: csp_fr_iort_2024.pdf
+    pages: [117, 124]
+    title: "Décret du 18 juillet 1957 sur l'organisation de la nomination de tuteurs et le contrôle de leur gestion"
+    title_fr: "Décret du 18 juillet 1957 sur l'organisation de la nomination de tuteurs et le contrôle de leur gestion"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: surname_abandoned_children_1998_fr
+    work_id: surname_abandoned_children_1998
+    file: csp_fr_iort_2024.pdf
+    pages: [125, 130]
+    title: "Loi n°98-75 du 28 octobre 1998 relative à l'attribution d'un nom patronymique aux enfants abandonnés ou de filiation inconnue"
+    title_fr: "Loi n°98-75 du 28 octobre 1998 relative à l'attribution d'un nom patronymique aux enfants abandonnés ou de filiation inconnue"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: alimony_fund_1993_fr
+    work_id: alimony_fund_1993
+    file: csp_fr_iort_2024.pdf
+    pages: [131, 133]
+    title: "Loi n°93-65 du 5 juillet 1993 portant création d'un fonds de garantie de la pension alimentaire et de la rente de divorce"
+    title_fr: "Loi n°93-65 du 5 juillet 1993 portant création d'un fonds de garantie de la pension alimentaire et de la rente de divorce"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: alimony_fund_decree_1993_fr
+    work_id: alimony_fund_decree_1993
+    file: csp_fr_iort_2024.pdf
+    pages: [135, 138]
+    title: "Décret n°93-1655 du 9 août 1993 relatif aux modalités d'intervention du fonds de garantie de la pension alimentaire et de la rente de divorce"
+    title_fr: "Décret n°93-1655 du 9 août 1993 relatif aux modalités d'intervention du fonds de garantie de la pension alimentaire et de la rente de divorce"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: late_payment_remission_2022_fr
+    work_id: late_payment_remission_2022
+    file: csp_fr_iort_2024.pdf
+    pages: [139, 141]
+    title: "Décret-loi n°2022-9 du 2 février 2022 fixant les modalités et les procédures de remise des indemnités de retard dues au titre des interventions du Fonds de garantie de la pension alimentaire et de la rente de divorce"
+    title_fr: "Décret-loi n°2022-9 du 2 février 2022 fixant les modalités et les procédures de remise des indemnités de retard dues au titre des interventions du Fonds de garantie de la pension alimentaire et de la rente de divorce"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr
+
+  - doc_id: online_birth_extract_2022_fr
+    work_id: online_birth_extract_2022
+    file: csp_fr_iort_2024.pdf
+    pages: [143, 144]
+    title: "Arrêté du 16 août 2022 fixant le modèle de document de l'extrait de naissance délivré en ligne"
+    title_fr: "Arrêté du 16 août 2022 fixant le modèle de document de l'extrait de naissance délivré en ligne"
+    language: fr
+    extraction: text
+    authority: official
+    legal_status: consolidated
+    collection: annex
+    <<: *iort_fr

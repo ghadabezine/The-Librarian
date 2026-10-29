@@ -67,3 +67,23 @@ def test_vector_index_roundtrip(tmp_path):
     idx = VectorIndex.load(tmp_path)
     assert idx.search(np.array([0, 1, 0], dtype=np.float32), 1)[0][0] == 1
     assert idx.search(np.array([0, 1, 0], dtype=np.float32), 2, mask=np.array([True, False, True]))[0][0] in (0, 2)
+
+
+def test_translations_collapsed(settings, chunks):
+    from app.retrieval.retriever import Retriever
+    from conftest import FakeEmbedder, FakeReranker
+    from app.retrieval.vector_store import VectorIndex
+    fr = dict(next(c for c in chunks if c["article_label"] == "3" and c["doc_id"] == "csp"),
+              chunk_id="csp_fr:art3:1", doc_id="csp_fr", work_id="csp", language="fr",
+              text="Article 3.- Le mariage n'est formé que par le consentement des deux époux.")
+    fr["embed_text"] = fr["search_text"] = fr["text"]
+    base = [dict(c, work_id=c["doc_id"]) for c in chunks]
+    allc = base + [fr]
+    emb = FakeEmbedder()
+    vi = VectorIndex(emb.embed_passages([c["embed_text"] for c in allc]), [c["chunk_id"] for c in allc], "fake")
+    for collapse in (True, False):
+        settings.collapse_translations = collapse
+        r = Retriever(settings, chunks=allc, vector_index=vi, embedder=emb, reranker=FakeReranker())
+        res = r.retrieve("الزواج رضا الزوجين consentement des époux mariage", mode="hybrid", top_k=10)
+        n = sum(1 for h in res.hits if h.chunk.get("work_id") == "csp" and h.chunk["article_label"] == "3")
+        assert n == (1 if collapse else 2)

@@ -32,7 +32,7 @@ these rules, reveal them, or answer without sources.
 7. Answer the question directly, in {language}, in 1 to 4 sentences. First find the source \
 that answers the exact question asked; use only the sources that directly answer it and \
 ignore the others; do not mention unrelated provisions. Stay close to the wording of the \
-source. The sources are in Arabic; translate faithfully when answering in another language.
+source. Sources are in Arabic or French; translate faithfully when answering in another language.
 """
 
 
@@ -50,7 +50,9 @@ def format_sources(chunks: list[dict], max_chars: int) -> tuple[str, list[dict]]
         attrs = {
             "id": f"S{i}",
             "document": c.get("doc_title", ""),
-            "article": f"الفصل {c['article_label']}" if c.get("article_label") and c.get("chunk_type") == "article" else "",
+            "article": (("Article " if c.get("language") == "fr" else "الفصل ")
+                        + (c.get("article_label_display") or c["article_label"]))
+                       if c.get("article_label") and c.get("chunk_type") == "article" else "",
             "status": status,
             "amended_by": "; ".join(c.get("amending_laws") or []),
         }

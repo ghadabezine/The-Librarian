@@ -15,23 +15,28 @@ need answers they can check against the official text.
 
 | Document | Source | Pages | Articles | Status |
 |---|---|---|---|---|
-| مجلة الأحوال الشخصية (CSP) + promulgation decree of 13 Aug 1956 | IORT official edition 2019, revised to 16 May 2017 — `justice.gov.tn/.../StatutpersonnelArabe.pdf` | 37 | 218 + 6 | in force |
-| 13 annexed laws, decrees and orders (civil status law 1957-3, marital property 1998-94, guardianship & adoption 1958-27, premarital certificate 1964-46, surnames for children of unknown parentage 1998-75, alimony guarantee fund 1993-65 and decree 1993-1655, …) | same IORT volume, annex | 65 | 187 | in force |
+| مجلة الأحوال الشخصية (CSP) + promulgation decree of 13 Aug 1956, Arabic | IORT official edition 2019, revised to 16 May 2017 — `justice.gov.tn/.../StatutpersonnelArabe.pdf` | 37 | 218 + 6 | in force |
+| 13 annexed laws, decrees and orders, Arabic (civil status law 1957-3, marital property 1998-94, guardianship & adoption 1958-27, premarital certificate 1964-46, surnames for children of unknown parentage 1998-75, alimony guarantee fund 1993-65 and decree 1993-1655, …) | same IORT volume, annex | 65 | 187 | in force |
+| Code du statut personnel + the same annexes, French | IORT official edition 2024, "revue et corrigée le 05 février 2024" | 47 + 85 | 218 + 6 + 187 | in force |
+| 3 texts only in the 2024 edition: decree 2020-312 (citizen unique identifier), decree-law 2022-9 (remission of late-payment penalties owed to the alimony fund), order of 16 Aug 2022 (online birth extract) | same French volume | 14 | 45 | in force |
 | CSP as reproduced by CAWTAR, with 30 endnotes quoting earlier wordings | PDF supplied by the team; original URL not recorded | 26 | 214 + 29 notes | **historical** |
 
-Total: 128 indexed pages, 680 chunks (official text: 102 pages). The
-official PDF stores Arabic with a custom font encoding, so its text layer is
-unusable and every page is OCR'd (§2).
+Total: **260 indexed pages, 1,187 chunks** (234 pages of official text).
 
-**Corpus size versus the brief.** The brief asks for "hundreds of pages or
-more". Our official corpus is 102 pages of dense legal text (about 130,000
-Arabic characters) plus 26 historical pages. That is too large for one prompt
-(well over 60,000 tokens), so retrieval is needed, but it is below the
-suggested size. The French official edition and the related codes (child
-protection code, Law 2017-58) are the natural extensions. They could not be
-downloaded from the build environment (see `postmortem.md`), and the import
-workflow (`data/sources.yaml` + `scripts/build_index.py`) accepts them without
-code changes.
+- **Arabic edition**: the PDF stores Arabic with a custom font encoding, so
+  its text layer is unusable and every page is OCR'd (§2).
+- **French edition**: it has a clean text layer.
+- **Linking**: each French document is linked to its Arabic counterpart by a
+  shared `work_id`.
+
+**Two editions as a cross-check.** The two official editions were parsed
+independently, and every one of the 13 shared texts yields exactly the same
+number of articles in both languages (CSP: 213 + 5 bis = 218). The 2024
+French edition lists amendments to the Code up to 2010 (Laws 2010-39 and
+2010-50) and none after, so the 2017 Arabic consolidation is still current.
+
+**Corpus size.** The 260 pages (about 400,000 characters) meet the brief's
+"hundreds of pages", and are far too large for one prompt.
 
 **Personal data.** The corpus is public legislation. User questions are not
 stored except when a user submits feedback; feedback is written to
@@ -71,9 +76,16 @@ stored except when a user submits feedback; feedback is written to
    - **Cross-references**: a cross-reference broken across lines ("… بال /
      الفصل 9.") must not open a new article. A new article requires a
      strong marker, or a plausible number following a finished sentence.
-   - **Coverage**: after these fixes, all 14 official documents have every
-     article number with no gaps. For the CSP that is 213 articles plus 5
-     bis articles; 18 of the CSP numbers were repaired.
+   - **Coverage**: after these fixes, all 14 official Arabic documents have
+     every article number with no gaps. For the CSP that is 213 articles plus
+     5 bis articles; 18 of the CSP numbers were repaired.
+   - **French parser** (`parse_units_fr`): handles "Article premier.-",
+     "Article 66 bis (Ajouté par …).-" and "Articles 3-4-5.-", LIVRE /
+     CHAPITRE / Titre headings, footnotes below the `______` rule, and the
+     watermark line repeated on every page. French bis/ter/quater map to
+     the same canonical labels as مكرر/ثالثا/رابعا, so "article 32 bis"
+     and "الفصل 32 مكرر" are the same provision. A display label keeps
+     the French form.
 5. **Validation and deduplication** (`chunker.finalize`): chunks shorter than
    12 normalised characters are dropped (1), exact duplicates are removed
    (2, the repealed decree articles 3–5 share one text), and chunk ids are
@@ -95,7 +107,7 @@ article number. Each chunk stores:
   heading › article. Many articles make no sense alone; "الفصل 12" only
   mentions the dowry because it sits under the heading "المهر".
 
-We compared four strategies on the same 183 questions
+We compared four strategies on the same questions
 (`eval/chunking_experiment.py`, results in `eval/results/chunking_experiment.md`):
 article-level chunks at 1,200 and 600 characters against structure-blind
 sliding windows of 800 and 1,500 characters. Windows lose the article
@@ -104,13 +116,14 @@ boundary that citations need, and mix neighbouring rules into one passage.
 ## 4. Embeddings and index
 
 **Embedding model: `intfloat/multilingual-e5-large`** (1024-d). It is strong
-on Arabic, French and English and handles cross-lingual retrieval: French and
-English questions find Arabic articles (dense Recall@5: fr 0.943, en 0.875).
+on Arabic, French and English and handles cross-lingual retrieval: before the
+French edition was added, French and English questions already found Arabic
+articles with dense Recall@5 of 0.943 and 0.875.
 Weights come from the public Weaviate inference image on Docker Hub, because
 HuggingFace was blocked in our build environment (`scripts/fetch_models.py`).
 
 **Index: an exact flat index** (`vector_store.py`, NumPy `.npy` plus JSONL
-metadata) instead of a vector database. With 680 chunks, exact search costs
+metadata) instead of a vector database. With 1,187 chunks, exact search costs
 under a millisecond, recall is perfect, and there is no server to run. The
 index is two files that survive restarts and live in a Docker volume.
 Metadata filtering (document, collection, legal status) is a boolean mask.
@@ -128,28 +141,48 @@ chunks, and the `VectorIndex` interface would stay the same.
   The dense retriever, the reranker and the LLM receive the user's question
   unchanged, so expansion cannot alter the legal meaning of the question.
 - **Explicit article references** ("الفصل 32 مكرر", "article 5") are
-  resolved by structure: the matching article is pinned first.
+  resolved by structure: the matching article is pinned first. Article
+  numbers restart in every law, so the lookup is limited to the Code unless
+  the question names another text ("loi n°98-94", "القانون عدد 94"), and the
+  version in the question's language comes first.
+- **Translation collapsing**: only the best-ranked language version of an
+  article is kept in the results, so the top 5 holds five distinct
+  provisions instead of an article and its translation.
 - **Fusion**: Reciprocal Rank Fusion (k = 60) of the top 20 BM25 and dense
   results.
 - **Historical texts** are excluded unless the question asks about earlier
   wordings ("قبل التنقيح", "ancienne rédaction", "original wording").
 
-Ablation (183 answerable questions; `eval/results/retrieval_ablation.md`):
+Ablation on the final bilingual corpus (203 answerable questions;
+`eval/results/retrieval_ablation.md`):
 
-| Mode | R@1 | R@5 | R@10 | MRR@10 | Search p95 |
-|---|---|---|---|---|---|
-| BM25 | 0.503 | 0.787 | 0.842 | 0.608 | 2 ms |
-| Dense | 0.727 | 0.945 | 0.978 | 0.819 | 324 ms |
-| Hybrid (RRF) | 0.661 | 0.913 | 0.973 | 0.766 | 285 ms |
-| Hybrid + reranker | **0.803** | **0.973** | **0.989** | **0.874** | 9,720 ms |
+| Mode | R@1 | R@3 | R@5 | R@10 | MRR@10 | Search p95 |
+|---|---|---|---|---|---|---|
+| BM25 | 0.557 | 0.734 | 0.823 | 0.882 | 0.665 | 2 ms |
+| Dense | 0.709 | 0.852 | 0.892 | 0.951 | 0.789 | 279 ms |
+| Hybrid (RRF) | 0.660 | 0.833 | 0.911 | 0.951 | 0.765 | 274 ms |
+| Hybrid + reranker | **0.842** | **0.956** | **0.975** | **0.980** | **0.900** | 7,878 ms |
 
-Plain RRF is *worse* than dense alone. BM25 is weak on French and English
-questions (Recall@5 0.63) even with the glossary, and equal-weight fusion
-lets its errors displace good dense hits. The reranker turns the fused list
-into the best ranking, with Recall@1 up 7.6 points over dense. We keep hybrid
-retrieval because the reranker benefits from BM25's exact matches on
-Arabic questions (article numbers, rare terms), and because the fused list is
-what the reranker reorders.
+Recall@5 by question language, hybrid + reranker: Arabic 0.978 (134),
+French 1.000 (52), English 0.882 (17).
+
+What each stage adds:
+
+- **Hybrid over dense** adds 1.9 points of Recall@5. Before the French
+  edition was indexed (Arabic-only corpus, 183 questions,
+  `retrieval_ablation_v1_arabic_only.md`), plain RRF was *worse* than dense
+  (0.913 vs 0.945). BM25 could not match French or English questions to
+  Arabic text (Recall@5 0.63), and equal-weight fusion let its misses push
+  good dense hits down. With French text in the index, BM25 reaches 0.904
+  on French questions, and fusion now helps.
+- **The reranker** adds 13.3 points of Recall@1 over dense and 6.4 points of
+  Recall@5 over hybrid. It is the most accurate stage and by far the most
+  expensive.
+- **English** is the weakest language because no English text exists;
+  English questions rely on cross-lingual matching.
+
+Collapsing translations leaves Recall@5 almost unchanged (0.970 → 0.975).
+Its purpose is a more diverse context for the LLM.
 
 ## 6. Reranking
 

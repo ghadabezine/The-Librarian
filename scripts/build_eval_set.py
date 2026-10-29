@@ -3,9 +3,8 @@
 Checks for every item:
   1. each gold reference "doc_id:article_label" resolves to indexed chunks
   2. the evidence quote occurs (after search normalisation) in a gold article
-  3. each key-fact group has a variant present in the gold articles, or the
-     item is non-Arabic (facts are then translations and cannot be matched
-     against the Arabic source text)
+  3. each key-fact group has a variant present in the gold articles (Arabic or
+     French version); English facts are translations and are not matched
 Items failing 1 or 2 are kept but marked verified=false and reported.
 """
 from __future__ import annotations
@@ -29,9 +28,10 @@ def main() -> None:
     settings = get_settings()
     chunks, _ = build_chunks(settings)
     by_article: dict[str, list[dict]] = defaultdict(list)
-    for c in chunks:
+    for c in chunks:   # gold refs match either language version of a text (work_id)
         if c.get("article_label"):
-            by_article[f"{c['doc_id']}:{c['article_label']}"].append(c)
+            for key in {c["doc_id"], c.get("work_id") or c["doc_id"]}:
+                by_article[f"{key}:{c['article_label']}"].append(c)
 
     items = yaml.safe_load((ROOT / "data/eval/qa_source.yaml").read_text(encoding="utf-8"))["items"]
     out, problems = [], []
@@ -47,10 +47,10 @@ def main() -> None:
         checks = {
             "gold_resolved": not missing,
             "evidence_found": ev_ok if it["answerable"] else None,
-            "facts_found_in_source": facts_in_source if it["lang"] == "ar" else None,
+            "facts_found_in_source": facts_in_source if it["lang"] in ("ar", "fr") else None,
         }
         if it["answerable"]:
-            verified = not missing and ev_ok and (it["lang"] != "ar" or all(facts_in_source))
+            verified = not missing and ev_ok and (it["lang"] == "en" or all(facts_in_source))
         else:
             verified = not it.get("gold") or not missing
         if not verified:

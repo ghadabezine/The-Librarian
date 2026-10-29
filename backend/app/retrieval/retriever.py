@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,6 +20,9 @@ from .vector_store import VectorIndex, build_mask
 log = logging.getLogger(__name__)
 
 MODES = ("bm25", "dense", "hybrid", "hybrid_rerank")
+# A question that names a law other than the Code ("القانون عدد 94 لسنة 1998", "loi n°98-94").
+OTHER_LAW = re.compile(r"(?:قانون|القانون|أمر|الأمر|قرار|loi|décret|arrêté|law|decree)\s+(?:عدد|n\s*°|no\.?|number)?\s*\d",
+                       re.IGNORECASE)
 
 
 @dataclass
@@ -82,15 +86,24 @@ class Retriever:
         return self._reranker
 
     def _article_lookup(self, info: QueryInfo, mask: np.ndarray | None) -> list[int]:
+        """Chunks of the articles cited in the question ("الفصل 5", "article 32 bis").
+
+        Article numbers restart in every law, so unless the question names
+        another text the lookup is limited to the Personal Status Code. Chunks
+        in the question's language come first."""
         if not info.article_refs:
             return []
+        other_law = OTHER_LAW.search(info.text)
         out = []
         for i, c in enumerate(self.chunks):
             if mask is not None and not mask[i]:
                 continue
-            if c.get("article_label") in info.article_refs and c.get("chunk_type") == "article":
-                out.append(i)
-        return out
+            if c.get("chunk_type") != "article" or c.get("article_label") not in info.article_refs:
+                continue
+            if not other_law and (c.get("work_id") or c["doc_id"]) != "csp":
+                continue
+            out.append(i)
+        return sorted(out, key=lambda i: self.chunks[i].get("language") != info.language)
 
     def retrieve(self, question: str, mode: str | None = None, top_k: int | None = None,
                  filters: dict | None = None, predicate: Callable[[dict], bool] | None = None) -> RetrievalResult:
@@ -155,6 +168,17 @@ class Retriever:
                 ranked = [(i, rerank_scores[i]) for i in pinned + rest]
                 timings["rerank"] = (time.perf_counter() - t) * 1000
                 reranked = True
+
+        if self.s.collapse_translations:
+            seen_keys, collapsed = set(), []
+            for i, sc in ranked:
+                c = self.chunks[i]
+                key = (c.get("work_id") or c["doc_id"], c.get("chunk_type"), c.get("article_label"), c.get("part"))
+                if c.get("article_label") and key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                collapsed.append((i, sc))
+            ranked = collapsed
 
         hits = [Hit(chunk=self.chunks[i], score=float(s), bm25_rank=bm25_rank.get(i),
                     dense_rank=dense_rank.get(i), rerank_score=rerank_scores.get(i),
