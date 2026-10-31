@@ -57,6 +57,13 @@ def test_search_modes(client):
         assert r.status_code == 200 and r.json()["hits"], mode
 
 
+def test_article_versions(client):
+    r = client.get("/articles/csp/3")
+    body = r.json()
+    assert r.status_code == 200 and body["versions"][0]["text"].startswith("الفصل 3")
+    assert client.get("/articles/csp/9999").status_code == 404
+
+
 def test_documents_requires_manifest(client, settings):
     assert client.get("/documents").status_code == 503
     settings.index_dir.mkdir(parents=True)

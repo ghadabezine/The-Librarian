@@ -97,6 +97,12 @@ class ChatResponse(BaseModel):
     usage: dict[str, float] = Field(default_factory=dict)
 
 
+class ArticleVersionsResponse(BaseModel):
+    work_id: str
+    article_label: str
+    versions: list[Source]
+
+
 class SearchHit(BaseModel):
     rank: int
     score: float

@@ -28,6 +28,8 @@ async function request(path, options = {}) {
 export const api = {
   health: () => request("/health"),
   documents: () => request("/documents"),
+  article: (workId, label) =>
+    request(`/articles/${encodeURIComponent(workId)}/${encodeURIComponent(label)}`),
   chat: (question, history) =>
     request("/chat", { method: "POST", body: JSON.stringify({ question, history }) }),
   feedback: (payload) => request("/feedback", { method: "POST", body: JSON.stringify(payload) }),

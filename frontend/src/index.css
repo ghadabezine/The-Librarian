@@ -19,4 +19,7 @@ body {
   font-family: var(--font-latin);
 }
 [dir="rtl"] body, .font-ar, [lang="ar"] { font-family: var(--font-arabic); }
-.legal-text { font-family: var(--font-arabic); line-height: 2; white-space: pre-wrap; }
+/* French or English text inside the Arabic interface keeps the Latin font. */
+[lang="fr"], [lang="en"] { font-family: var(--font-latin); }
+/* Law text in a print-style naskh, like the official journal. */
+.legal-text { font-family: "Amiri", var(--font-arabic); font-size: 1.05em; line-height: 2.1; white-space: pre-wrap; }

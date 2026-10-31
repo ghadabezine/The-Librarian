@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from ..core.config import Settings, get_settings
 from ..generation.generator import RAGService, _source_view
-from ..models.schemas import (ChatRequest, ChatResponse, DocumentsResponse, FeedbackRequest, FeedbackResponse,
+from ..models.schemas import (ArticleVersionsResponse, ChatRequest, ChatResponse, DocumentsResponse, FeedbackRequest, FeedbackResponse,
                               HealthResponse, SearchHit, SearchRequest, SearchResponse, Source)
 
 log = logging.getLogger(__name__)
@@ -73,6 +73,26 @@ def search(req: SearchRequest, svc: RAGService = Depends(get_service)) -> Search
             for i, h in enumerate(ret.hits, 1)]
     return SearchResponse(query=req.query, language=ret.query.language, mode=ret.mode, hits=hits,
                           timings_ms=ret.timings_ms)
+
+
+@router.get("/articles/{work_id}/{label}", response_model=ArticleVersionsResponse)
+def article_versions(work_id: str, label: str, svc: RAGService = Depends(get_service)) -> ArticleVersionsResponse:
+    """Every in-force language version of one article (e.g. Arabic + French),
+    so the interface can show a cited article next to its translation."""
+    parts: dict[str, list[dict]] = {}
+    for c in svc.retriever.chunks:
+        if (c.get("chunk_type") == "article" and c.get("article_label") == label
+                and (c.get("work_id") or c["doc_id"]) == work_id and c.get("legal_status") != "historical"):
+            parts.setdefault(c.get("language") or "ar", []).append(c)
+    if not parts:
+        raise HTTPException(404, detail="article not found")
+    versions = []
+    for lang in sorted(parts, key=lambda x: (x != "ar", x)):
+        chunks = sorted(parts[lang], key=lambda c: c.get("part") or 1)
+        merged = {**chunks[0], "text": "\n".join(c["text"] for c in chunks),
+                  "page_end": chunks[-1].get("page_end")}
+        versions.append(Source(**_source_view(merged, len(versions) + 1)))
+    return ArticleVersionsResponse(work_id=work_id, article_label=label, versions=versions)
 
 
 @router.get("/documents", response_model=DocumentsResponse)

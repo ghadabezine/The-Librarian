@@ -32,7 +32,7 @@ export default function ChatMessage({ t, msg, onCite, activeSource }) {
         </span>
         <span className="text-ink-soft/70">{r.model} · {Math.round(r.timings_ms.total)} ms</span>
       </div>
-      <AnswerText text={r.answer} onCite={(id) => onCite(msg.id, id)}
+      <AnswerText t={t} text={r.answer} sources={r.sources} onCite={(id) => onCite(msg.id, id)}
         activeId={activeSource?.msgId === msg.id ? activeSource.sourceId : null} />
       {warnings.length > 0 && (
         <ul className="mt-2 space-y-1 text-xs text-warn">

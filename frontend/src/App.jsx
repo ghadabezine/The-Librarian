@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api.js";
-import { EXAMPLES, UI, textDir } from "./i18n.js";
+import { TOPICS, UI, textDir } from "./i18n.js";
 import ChatMessage from "./components/ChatMessage.jsx";
 import SourcePanel from "./components/SourcePanel.jsx";
 import CorpusModal from "./components/CorpusModal.jsx";
+import TopicCards from "./components/TopicCards.jsx";
 
 let nextId = 1;
 
@@ -26,7 +27,9 @@ export default function App() {
     try { localStorage.setItem("ui-lang", lang); } catch { /* storage unavailable */ }
   }, [lang, t.dir]);
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]);
+  useEffect(() => {
+    if (messages.length || loading) endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   // The source panel shows the selected answer, or the latest one.
   const panelMsg = useMemo(() => {
@@ -89,19 +92,7 @@ export default function App() {
       <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col lg:flex-row">
         <section className="flex min-h-0 flex-1 flex-col">
           <div className="flex-1 space-y-4 overflow-y-auto px-4 py-5">
-            {messages.length === 0 && (
-              <div className="mx-auto max-w-2xl pt-6 text-center">
-                <p className="mb-4 text-sm text-ink-soft">{t.examples}</p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {EXAMPLES.map((q) => (
-                    <button key={q} type="button" dir={textDir(q)} onClick={() => ask(q)}
-                      className="rounded-full border border-sand-dark bg-white px-3 py-1.5 text-sm hover:border-ink">
-                      {q}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            {messages.length === 0 && <TopicCards t={t} lang={lang} topics={TOPICS} onAsk={ask} />}
             {messages.map((m) => (
               <ChatMessage key={m.id} t={t} msg={m} onCite={onCite} activeSource={active} />
             ))}
