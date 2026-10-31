@@ -19,12 +19,16 @@ export default function ChatMessage({ t, msg, onCite, activeSource }) {
   }
   const r = msg.response;
   const abstained = r.status === "abstained";
+  // Extractive mode quotes the top passages without an LLM, so nothing was
+  // generated or checked: say so instead of "answer grounded in sources".
+  const extracted = !abstained && r.model === "extractive";
   const warnings = r.warnings || [];
   return (
     <div className={`rounded-2xl border bg-white px-4 py-3 shadow-sm ${abstained ? "border-warn/40" : "border-sand-dark"}`}>
       <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
-        <span className={`rounded-full px-2 py-0.5 font-medium ${abstained ? "bg-warn/10 text-warn" : "bg-ok/10 text-ok"}`}>
-          {abstained ? `⚠ ${t.unsupported}` : `✓ ${t.answered}`}
+        <span className={`rounded-full px-2 py-0.5 font-medium ${abstained ? "bg-warn/10 text-warn"
+          : extracted ? "bg-sand-dark text-ink-soft" : "bg-ok/10 text-ok"}`}>
+          {abstained ? `⚠ ${t.unsupported}` : extracted ? `≡ ${t.extracted}` : `✓ ${t.answered}`}
         </span>
         <span className="text-ink-soft/70">{r.model} · {Math.round(r.timings_ms.total)} ms</span>
       </div>
