@@ -37,6 +37,14 @@ def test_chat_returns_citations(client):
     assert body["disclaimer"]
 
 
+def test_chat_abstains_on_off_topic_question(client):
+    r = client.post("/chat", json={"question": "What is the capital of Japan?"})
+    body = r.json()
+    assert r.status_code == 200 and body["status"] == "abstained"
+    assert body["abstain_reason"] and body["citations"] == []
+    assert body["answer"] and body["disclaimer"]
+
+
 def test_chat_validation_errors(client):
     assert client.post("/chat", json={"question": " "}).status_code == 422
     assert client.post("/chat", json={"question": "x" * 1001}).status_code == 422
