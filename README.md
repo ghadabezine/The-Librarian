@@ -140,7 +140,8 @@ yet.
 
 ### Generation and optimisation
 
-See [`optimisation.md`](optimisation.md) and `eval/results/generation_*_summary.json`.
+See [`docs/evaluation.md`](docs/evaluation.md) for generation metrics,
+latency and cost, and the retrieval ablation.
 
 ## Repository layout
 
@@ -151,7 +152,7 @@ data/          sources.yaml, raw/ (official PDFs), ocr/ (OCR cache), eval/ (Q&A 
 eval/          evaluation scripts and results/
 scripts/       fetch_models, ocr_pdf, build_index, build_eval_set, ui_smoke_test
 tests/         unit and integration tests (fake models, no downloads)
-design.md  optimisation.md  postmortem.md  docs/report.md
+design.md  docs/evaluation.md  docs/deployment.md
 ```
 
 ## Deployment
@@ -170,5 +171,3 @@ Any VM with 4 vCPUs, 16 GB of RAM and 15 GB of disk can host it. See
 | Seifallah Chourou | Evaluation & deployment | Evaluation dataset, retrieval and generation evaluation, ablations, optimisation measurements, Docker, documentation |
 
 Implementation was carried out with an AI coding assistant (Claude Code).
-Each member reviewed and is responsible for their area. *Team: replace this
-paragraph with your actual division of work before submission.*
