@@ -56,3 +56,16 @@ VM at about $0.20/h, the price used in the cost model). Steps:
 for development had no cloud account or credentials. The team needs to run
 the steps above on a VM of their own; nothing in the code depends on the
 host.
+
+## Verification
+
+Verified locally on 2026-11-01 with Docker Compose v5.6.1 on Windows.
+
+- `docker compose up --build` builds both images (~13 min cold, ~19s incremental)
+- `GET /health` → `200`, `{"status":"ok","index_loaded":true,"chunks":1187,"llm_provider":"llamacpp","retrieval_mode":"hybrid_rerank"}`
+- Frontend serves the chat UI at `http://localhost:8080`
+- End-to-end question answering with citations verified through the UI
+- Backend startup: ~53s with models and index mounted
+
+Known deployment note: the entrypoint script needs LF line endings; on Windows
+the `.gitattributes` file forces `*.sh text eol=lf` to prevent CRLF corruption.
