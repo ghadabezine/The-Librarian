@@ -1,0 +1,35 @@
+# Dockerfile for Hugging Face Spaces / ClawCloud / Docker Hub deployment.
+# Uses port 7860 for cloud platforms; local docker-compose uses port 8000.
+# Build context = repo root.
+
+FROM python:3.13-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TOKENIZERS_PARALLELISM=false \
+    PORT=7860
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install CPU-only torch first (avoids pulling CUDA wheels).
+RUN pip install --no-cache-dir torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+
+COPY backend/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+COPY backend/ /app/backend/
+COPY data/ /app/data/
+
+# Models are downloaded on first start from Hugging Face Hub (~4.4 GB) into /app/models.
+
+ENV RAG_LLM_PROVIDER=openai
+ENV RAG_DATA_DIR=/app/data
+ENV RAG_MODELS_DIR=/app/models
+
+EXPOSE 7860
+
+CMD ["uvicorn", "app.main:app", "--app-dir", "backend", "--host", "0.0.0.0", "--port", "7860"]

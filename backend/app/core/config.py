@@ -49,41 +49,42 @@ class Settings(BaseSettings):
 
     # Retrieval
     retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank"] = "hybrid_rerank"
-    top_k: int = 5                 # chunks passed to the generator
-    candidate_k: int = 20          # candidates per retriever before fusion
-    rerank_k: int = 20             # fused candidates sent to the reranker
+    top_k: int = 5
+    candidate_k: int = 20
+    rerank_k: int = 20
     rrf_k: int = 60
-    # Abstain without calling the LLM when the best reranker score is below this.
-    min_rerank_score: float = 0.01   # calibrated in eval/results/rerank_simulation.md
-    # Skip the reranker when BM25 and dense agree strongly on the top hit (optimisation).
+    min_rerank_score: float = 0.01
     skip_rerank_when_confident: bool = False
-    # Keep only the best-ranked language version of an article in the results,
-    # so the top-k holds k distinct provisions instead of translations.
     collapse_translations: bool = True
 
     # Generation
-    llm_provider: Literal["llamacpp", "anthropic", "extractive"] = "llamacpp"
+    llm_provider: Literal["llamacpp", "anthropic", "openai", "extractive"] = "llamacpp"
     llm_model: str = "qwen2.5-3b-instruct-q4_k_m.gguf"
     llm_max_tokens: int = 512
     llm_temperature: float = 0.0
     llm_threads: int = 4
     llm_context: int = 8192
-    # Keep KV states of earlier prompts in RAM so a shared prefix (the fixed
-    # system prompt) is not re-evaluated. llama.cpp already reuses the prefix of
-    # the immediately preceding call; this extends it across interleaved calls.
     llm_prompt_cache: bool = False
     max_context_chars: int = 6000
+
+    # Anthropic
     anthropic_api_key: str | None = None
     anthropic_model: str = "claude-opus-5-5"
     anthropic_effort: Literal["low", "medium", "high"] = "medium"
-    # Optional: include only answers about these collections by default.
+
+    # OpenAI
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
+    openai_base_url: str | None = None  # for Azure / proxies; None = official API
+
+    # Other
     include_historical: bool = False
-
-    # Caching (optimisation)
     query_cache_size: int = 0
-
-    # API
-    cors_origins: list[str] = ["http://localhost:5173", "http://localhost:8080", "http://localhost:3000"]
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "http://localhost:8080",
+        "http://localhost:3000",
+    ]
     log_level: str = "INFO"
 
 

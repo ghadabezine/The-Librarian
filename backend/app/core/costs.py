@@ -17,6 +17,12 @@ CPU_HOUR_USD = 0.20
 
 def api_cost(model: str, input_tokens: int, output_tokens: int) -> float:
     pin, pout = API_PRICES.get(model, (0.0, 0.0))
+    if pin == 0.0 and pout == 0.0:
+        # Longest-key-first so versioned names match the right base model.
+        for key, (kp_in, kp_out) in sorted(API_PRICES.items(), key=lambda kv: -len(kv[0])):
+            if model.startswith(key):
+                pin, pout = kp_in, kp_out
+                break
     return input_tokens / 1e6 * pin + output_tokens / 1e6 * pout
 
 

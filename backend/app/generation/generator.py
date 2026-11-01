@@ -149,9 +149,11 @@ class RAGService:
         if ver.invalid_ids:   # drop citations to non-existent sources
             text = CITATION.sub(lambda m: m.group(0) if 1 <= int(m.group(1)) <= len(used) else "", text)
         timings["total"] = (time.perf_counter() - t0) * 1000
-        usage["cost_usd"] = (api_cost(out.model, out.input_tokens, out.output_tokens)
-                             if self.s.llm_provider == "anthropic"
-                             else compute_cost(timings["total"] / 1000))
+        usage["cost_usd"] = (
+    api_cost(out.model, out.input_tokens, out.output_tokens)
+    if self.s.llm_provider in ("anthropic", "openai")
+    else compute_cost(timings["total"] / 1000)
+)
         return Answer(question, lang, text, "answered", None, self._citations(ver, used, sources), sources,
                       DISCLAIMER[lang], ver.__dict__, timings, usage, ret.mode, out.model)
 
