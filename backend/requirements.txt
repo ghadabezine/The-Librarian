@@ -13,3 +13,4 @@ sentence-transformers==5.2.1
 llama-cpp-python==0.3.36
 anthropic==2.3.0
 openai==2.51.0
+requests
