@@ -157,11 +157,14 @@ design.md  docs/evaluation.md  docs/deployment.md
 
 ## Deployment
 
-`docker-compose.yml` runs the backend (FastAPI, models and index in
-volumes) and the frontend (nginx serving the build and proxying `/api`).
-Any VM with 4 vCPUs, 16 GB of RAM and 15 GB of disk can host it. See
-`docs/deployment.md`.
+**Live Application:** (https://the-librarian-iota.vercel.app/)
 
+- **Backend API:** https://almurshid-4f2a.style.dev
+- **Frontend:** (https://the-librarian-iota.vercel.app/)
+
+The backend runs on a Freestyle cloud VM (4 vCPU, 8 GiB RAM + 4 GiB Swap) using Docker. 
+The frontend is a static Vite build hosted on Vercel. Generation is powered by OpenAI 
+`gpt-4o-mini`; retrieval runs locally on the VM.
 ## Contributions
 
 | Member | Area | Work |
